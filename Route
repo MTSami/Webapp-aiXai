@@ -1,0 +1,79 @@
+public static void findRoute(String a, String b){
+        
+        int vertices = places.size();
+        int source = getIndex(a);
+        int destination = getIndex(b);
+        int[] dist = new int[vertices];
+        int[] prev = new int[vertices];
+        int u, alt;
+        Location x;
+        
+        for (int i = 0; i < vertices; i++) {
+            dist[i] =999;
+            prev[i] = 0;
+        }
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>(vertices, new Comparator<Integer>() {
+
+            @Override
+            public int compare(Integer f, Integer s) {
+                if (dist[f] > dist[s]) {
+                    return 1;
+                }
+
+                if (dist[f] < dist[s]) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        
+                
+        dist[source] = 0;
+
+        for (int i = 0; i < vertices; i++) {
+            pq.add(i);
+        }
+
+        
+
+//         while ( !(pq.isEmpty()) ) {
+//            System.out.println("Gej"+pq.remove());
+//        }
+
+        while ( !(pq.isEmpty()) ) {
+            
+            u = pq.remove();
+            //System.out.println("Name: "+ places.get(u).name);
+            x = places.get(u);
+            //System.out.print(u);
+            for (int v = 0; v < x.neighbors.size(); v++) {
+
+                    alt = (int) (dist[u] + x.neighbors.get(v).cost);
+                    //System.out.println(alt);
+                    if (alt < dist[getIndex(x.neighbors.get(v).name)]) {
+                        dist[getIndex(x.neighbors.get(v).name)] = alt;
+                        prev[getIndex(x.neighbors.get(v).name)] = u;
+                    }
+
+            }
+        }
+        
+        System.out.println("Distance to your destination is approximately " + dist[destination] +"kms.");
+        System.out.print("Your map: ");
+
+        
+//        for (int i = 0; i < vertices; i++) {
+//            System.out.print(dist[i]+" ");
+//        }
+//        
+//        System.out.println(" ");
+//        
+        for (int i = 0; i < destination; i++) {
+            System.out.print(places.get(prev[i]).name+">");
+        }
+        System.out.println(b);
+        
+        
+    }
